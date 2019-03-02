@@ -12,6 +12,7 @@
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(18, STRIP_PIN, NEO_GRB + NEO_KHZ800);
 byte currentState;
 byte LED_val;
+byte last_animation = 255;
 
 unsigned long buttonPressTime;
 int lastButtonState;
@@ -97,7 +98,11 @@ void fadeOutButton(){
 
 void playRandomAnimation(){
 
-  byte index = random(6);
+  byte index;
+
+  do{
+    index = random(6);
+  } while (index == last_animation);
 
   switch (index) {
   case 0:
@@ -113,13 +118,15 @@ void playRandomAnimation(){
     rainbow(50);
     break;
   case 4:
-    rainbowCycle(50);
+    rainbowCycle(20);
     break;
   case 5:
     theaterChaseRainbow(100);
     break;
   default:
     break;
+
+   last_animation = index;
 }
   
 }
@@ -208,4 +215,3 @@ uint32_t Wheel(byte WheelPos) {
   WheelPos -= 170;
   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
-
